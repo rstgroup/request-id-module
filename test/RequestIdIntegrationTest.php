@@ -53,7 +53,7 @@ class RequestIdIntegrationTest extends AbstractHttpControllerTestCase
      */
     public function it_return_response_301_with_request_id_from_request_if_controller_return_redirect_response()
     {
-        $this->mockGenerator('abc123');
+        $this->mockGenerator('abc1234');
 
         $_SERVER['HTTP_X_REQUEST_ID'] = 'qwerty987';
 
@@ -118,6 +118,7 @@ class RequestIdIntegrationTest extends AbstractHttpControllerTestCase
 
         $this->mergeWithConfig([
             'service_manager' => [
+                'allow_override' => true,
                 'services' => [
                     GeneratorInterface::class => $generator,
                 ],
