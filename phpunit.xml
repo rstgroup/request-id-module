@@ -11,12 +11,6 @@
         </testsuite>
     </testsuites>
 
-    <logging>
-        <log type="junit" target="data/tests/results/phpunit.xml" logIncompleteSkipped="false" charset="UTF-8"/>
-        <log type="coverage-clover" target="data/tests/results/phpunit-clover.xml"/>
-        <log type="coverage-html" target="data/tests/results/phpunit-clover" charset="UTF-8" yui="true" highlight="false" />
-    </logging>
-
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>
