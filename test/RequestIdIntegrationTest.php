@@ -2,8 +2,6 @@
 namespace RstGroup\RequestIdModule\Test;
 
 use PhpMiddleware\RequestId\Generator\GeneratorInterface;
-use Zend\Http\Header\GenericHeader;
-use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\ControllerManager;
 use Zend\Mvc\Router\RouteStackInterface;
@@ -22,6 +20,13 @@ class RequestIdIntegrationTest extends AbstractHttpControllerTestCase
         $this->setApplicationConfig(
             include __DIR__ . '/TestAsset/application.config.php'
         );
+    }
+
+    public function tearDown()
+    {
+        unset($_SERVER['HTTP_X_REQUEST_ID']);
+
+        return parent::tearDown();
     }
 
     /**
@@ -59,8 +64,6 @@ class RequestIdIntegrationTest extends AbstractHttpControllerTestCase
         });
 
         $this->dispatch('/foo');
-
-        unset($_SERVER['HTTP_X_REQUEST_ID']);
 
         $this->assertResponseStatusCode(Response::STATUS_CODE_302);
         $this->assertHasRequestHeader('X-Request-Id');
@@ -101,8 +104,6 @@ class RequestIdIntegrationTest extends AbstractHttpControllerTestCase
         $_SERVER['HTTP_X_REQUEST_ID'] = 'qwerty987';
 
         $this->dispatch('/foo');
-
-        unset($_SERVER['HTTP_X_REQUEST_ID']);
 
         $this->assertResponseStatusCode(Response::STATUS_CODE_404);
         $this->assertHasRequestHeader('X-Request-Id');
