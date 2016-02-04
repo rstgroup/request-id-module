@@ -13,6 +13,8 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 class RequestIdIntegrationTest extends AbstractHttpControllerTestCase
 {
+    protected $traceError = false;
+
     protected function setUp()
     {
         parent::setUp();
@@ -43,6 +45,25 @@ class RequestIdIntegrationTest extends AbstractHttpControllerTestCase
         $this->dispatch('/foo');
 
         $this->assertResponseStatusCode(Response::STATUS_CODE_200);
+        $this->assertHasNotRequestHeader('X-Request-Id');
+        $this->assertHasResponseHeader('X-Request-Id');
+        $this->assertSame('abc123', $this->getResponseHeader('X-Request-Id')->getFieldValue());
+    }
+
+    /**
+     * @test
+     */
+    public function it_return_response_500_with_generated_request_id_if_controller_throw_exception()
+    {
+        $this->mockGenerator('abc123');
+
+        $this->mockController('/foo', 'foo-controller', function (RequestInterface $request, ResponseInterface $response = null) {
+            throw new \Exception();
+        });
+
+        $this->dispatch('/foo');
+
+        $this->assertResponseStatusCode(Response::STATUS_CODE_500);
         $this->assertHasNotRequestHeader('X-Request-Id');
         $this->assertHasResponseHeader('X-Request-Id');
         $this->assertSame('abc123', $this->getResponseHeader('X-Request-Id')->getFieldValue());
