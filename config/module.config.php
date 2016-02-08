@@ -11,7 +11,10 @@ return [
         'factories' => [
             \PhpMiddleware\RequestId\RequestIdProviderFactoryInterface::class => \RstGroup\RequestIdModule\RequestIdProviderFactoryFactory::class,
             \RstGroup\RequestIdModule\RequestIdListener::class => \RstGroup\RequestIdModule\RequestIdListenerFactory::class,
-        ]
+        ],
+        'invokables' => [
+            \PhpMiddleware\RequestId\Generator\GeneratorInterface::class => \PhpMiddleware\RequestId\Generator\PhpUniqidGenerator::class,
+        ],
     ],
     'listeners' => [
         \RstGroup\RequestIdModule\RequestIdListener::class,

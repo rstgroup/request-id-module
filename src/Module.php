@@ -4,7 +4,7 @@ namespace RstGroup\RequestIdModule;
 
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 
-class Module implements ConfigProviderInterface
+final class Module implements ConfigProviderInterface
 {
     /**
      * @return array

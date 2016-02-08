@@ -25,28 +25,31 @@ return [
 ];
 ```
 
-also in your autoload config based on environment add generator configuration for `service_manager`, ex.
-
-```php
-return [
-   'service_manager' => [
-        'invokables' => [
-            \PhpMiddleware\RequestId\Generator\GeneratorInterface::class => \PhpMiddleware\RequestId\Generator\PhpUniqidGenerator::class,
-    ],
-];
-```
-
 You can also change request header and not to allow ovveride request id by request header
 
 ```php
 return [
     'rst_group' => [
         'request_id_module' => [
-            'header' => 'X-Custoom-Request-Id',
+            'header' => 'X-Custom-Request-Id',
             'allow_override'=> false,
-        ]
+        ],
     ],
-]
+];
+```
+
+### Generator
+
+In your autoload config based on environment you can change default `PhpUniqidGenerator` to other, for example you can use md5 generator:
+
+```php
+return [
+   'service_manager' => [
+       'invokables' => [
+           \PhpMiddleware\RequestId\Generator\GeneratorInterface::class => \PhpMiddleware\RequestId\Generator\Md5Generator::class,
+       ],
+    ],
+];
 ```
 
 

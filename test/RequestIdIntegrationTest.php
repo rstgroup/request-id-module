@@ -1,7 +1,6 @@
 <?php
 namespace RstGroup\RequestIdModule\Test;
 
-use PhpMiddleware\RequestId\Generator\GeneratorInterface;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\ControllerManager;
 use Zend\Mvc\Router\RouteStackInterface;
@@ -22,6 +21,14 @@ class RequestIdIntegrationTest extends AbstractHttpControllerTestCase
         $this->setApplicationConfig(
             include __DIR__ . '/TestAsset/application.config.php'
         );
+
+        $this->mergeWithConfig([
+            'module_listener_options' => [
+                'config_glob_paths' => [
+                    __DIR__ . "/TestAsset/autoload/generator-request-id.php",
+                ],
+            ],
+        ]);
     }
 
     public function tearDown()
@@ -36,8 +43,6 @@ class RequestIdIntegrationTest extends AbstractHttpControllerTestCase
      */
     public function it_return_response_200_with_generated_request_id_if_controller_return_new_response()
     {
-        $this->mockGenerator('abc123');
-
         $this->mockController('/foo', 'foo-controller', function (RequestInterface $request, ResponseInterface $response = null) {
             return new Response();
         });
@@ -55,8 +60,6 @@ class RequestIdIntegrationTest extends AbstractHttpControllerTestCase
      */
     public function it_return_response_500_with_generated_request_id_if_controller_throw_exception()
     {
-        $this->mockGenerator('abc123');
-
         $this->mockController('/foo', 'foo-controller', function (RequestInterface $request, ResponseInterface $response = null) {
             throw new \Exception();
         });
@@ -74,8 +77,6 @@ class RequestIdIntegrationTest extends AbstractHttpControllerTestCase
      */
     public function it_return_response_301_with_request_id_from_request_if_controller_return_redirect_response()
     {
-        $this->mockGenerator('abc1234');
-
         $_SERVER['HTTP_X_REQUEST_ID'] = 'qwerty987';
 
         $this->mockController('/foo', 'foo-controller', function (RequestInterface $request, ResponseInterface $response = null) {
@@ -97,8 +98,6 @@ class RequestIdIntegrationTest extends AbstractHttpControllerTestCase
      */
     public function it_return_response_404_with_generated_request_id()
     {
-        $this->mockGenerator('abc123');
-
         $this->dispatch('/foo');
 
         $this->assertResponseStatusCode(Response::STATUS_CODE_404);
@@ -112,8 +111,6 @@ class RequestIdIntegrationTest extends AbstractHttpControllerTestCase
      */
     public function it_return_response_404_with_not_override_request_id()
     {
-        $this->mockGenerator('abc123');
-
         $this->mergeWithConfig([
             'module_listener_options' => [
                 'config_glob_paths' => [
@@ -130,21 +127,6 @@ class RequestIdIntegrationTest extends AbstractHttpControllerTestCase
         $this->assertHasRequestHeader('X-Request-Id');
         $this->assertHasResponseHeader('X-Request-Id');
         $this->assertSame('abc123', $this->getResponseHeader('X-Request-Id')->getFieldValue());
-    }
-
-    protected function mockGenerator($requestId)
-    {
-        $generator = $this->getMock(GeneratorInterface::class);
-        $generator->method('generateRequestId')->willReturn($requestId);
-
-        $this->mergeWithConfig([
-            'service_manager' => [
-                'allow_override' => true,
-                'services' => [
-                    GeneratorInterface::class => $generator,
-                ],
-            ],
-        ]);
     }
 
     protected function mergeWithConfig(array $config)
