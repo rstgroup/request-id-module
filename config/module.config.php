@@ -3,7 +3,7 @@
 return [
     'rst_group' => [
         'request_id_module' => [
-            'header' => 'X-Request-Id',
+            'header_name' => 'X-Request-Id',
             'allow_override'=> true,
         ]
     ],
