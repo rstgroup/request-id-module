@@ -1,6 +1,7 @@
 <?php
 namespace RstGroup\RequestIdModule;
 
+use PhpMiddleware\RequestId\Exception\MissingRequestId;
 use PhpMiddleware\RequestId\Exception\RequestIdExceptionInterface;
 use PhpMiddleware\RequestId\RequestIdProviderInterface;
 use Zend\EventManager\AbstractListenerAggregate;
@@ -58,7 +59,11 @@ final class RequestIdListener extends AbstractListenerAggregate implements Reque
 
     public function getRequestId()
     {
-       return $this->requestId;
+        if ($this->requestId === null) {
+            throw new MissingRequestId();
+        }
+
+        return $this->requestId;
     }
 
     public function addRequestIdToResponse(MvcEvent $event)

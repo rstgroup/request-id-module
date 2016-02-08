@@ -15,6 +15,9 @@ return [
         'invokables' => [
             \PhpMiddleware\RequestId\Generator\GeneratorInterface::class => \PhpMiddleware\RequestId\Generator\PhpUniqidGenerator::class,
         ],
+        'aliases' => [
+            'request_id_provider' => \RstGroup\RequestIdModule\RequestIdListener::class,
+        ]
     ],
     'listeners' => [
         \RstGroup\RequestIdModule\RequestIdListener::class,

@@ -55,10 +55,10 @@ return [
 
 ## Usage
 
-`RstGroup\RequestIdModule\RequestIdListener` implements `PhpMiddleware\RequestId\RequestIdProviderInterface`, so you can use them if you want to send request id to another service.
+If you need `request id`, ex. to send request id to another service, you can get it from provider:
 
 ```php
-$requestIdProvider = $serviceLocator->get(\RstGroup\RequestIdModule\RequestIdListener::class);
+$requestIdProvider = $serviceLocator->get('request_id_provider');
 $requestId = $requestIdProvider->getRequestId();
 ```
 
