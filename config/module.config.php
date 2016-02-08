@@ -13,10 +13,11 @@ return [
             \RstGroup\RequestIdModule\RequestIdListener::class => \RstGroup\RequestIdModule\RequestIdListenerFactory::class,
         ],
         'invokables' => [
-            \PhpMiddleware\RequestId\Generator\GeneratorInterface::class => \PhpMiddleware\RequestId\Generator\PhpUniqidGenerator::class,
+            \PhpMiddleware\RequestId\Generator\PhpUniqidGenerator::class => \PhpMiddleware\RequestId\Generator\PhpUniqidGenerator::class,
         ],
         'aliases' => [
             \PhpMiddleware\RequestId\RequestIdProviderInterface::class => \RstGroup\RequestIdModule\RequestIdListener::class,
+            \PhpMiddleware\RequestId\Generator\GeneratorInterface::class => \PhpMiddleware\RequestId\Generator\PhpUniqidGenerator::class,
         ]
     ],
     'listeners' => [
