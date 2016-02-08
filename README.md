@@ -2,7 +2,8 @@
 
 [![Build Status](https://travis-ci.org/rstgroup/request-id-module.svg?branch=master)](https://travis-ci.org/rstgroup/request-id-module)
 
-This module provide integration possibility to generate and add request id to request/response's header.
+This module provide integration possibility to generate and add `request id` to request/response's header.
+If you want more information, how `request id` is generating, check dependent project [php-middleware/request-id](https://github.com/php-middleware/request-id).
 
 ## Installation
 
@@ -12,8 +13,6 @@ This module provide integration possibility to generate and add request id to re
 }
 ```
 
-
-## Configuration
 
 In your ZF2 application config add to module list
 
@@ -25,7 +24,9 @@ return [
 ];
 ```
 
-You can also change request header and not to allow ovveride request id by request header
+## Configuration
+
+You can also change request header and not to allow override `request id` by request header
 
 ```php
 return [
