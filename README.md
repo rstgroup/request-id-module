@@ -58,7 +58,7 @@ return [
 If you need `request id`, ex. to send request id to another service, you can get it from provider:
 
 ```php
-$requestIdProvider = $serviceLocator->get('request_id_provider');
+$requestIdProvider = $serviceLocator->get(\PhpMiddleware\RequestId\RequestIdProviderInterface::class);
 $requestId = $requestIdProvider->getRequestId();
 ```
 

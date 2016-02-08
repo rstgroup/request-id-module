@@ -16,7 +16,7 @@ return [
             \PhpMiddleware\RequestId\Generator\GeneratorInterface::class => \PhpMiddleware\RequestId\Generator\PhpUniqidGenerator::class,
         ],
         'aliases' => [
-            'request_id_provider' => \RstGroup\RequestIdModule\RequestIdListener::class,
+            \PhpMiddleware\RequestId\RequestIdProviderInterface::class => \RstGroup\RequestIdModule\RequestIdListener::class,
         ]
     ],
     'listeners' => [
