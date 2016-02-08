@@ -4,7 +4,7 @@ namespace RstGroup\RequestIdModule\Test\TestAsset;
 
 use PhpMiddleware\RequestId\Generator\GeneratorInterface;
 
-class FakeGenerator implements GeneratorInterface
+final class FakeGenerator implements GeneratorInterface
 {
     public function generateRequestId()
     {
