@@ -1,6 +1,9 @@
 <?php
 namespace RstGroup\RequestIdModule;
 
+use PhpMiddleware\RequestId\Exception\MissingRequestId;
+use PhpMiddleware\RequestId\Exception\RequestIdExceptionInterface;
+use PhpMiddleware\RequestId\RequestIdProviderInterface;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Http\Request as HttpRequest;
@@ -10,7 +13,7 @@ use Zend\Http\Header\GenericHeader;
 use Zend\Http\Response as HttpResponse;
 use Zend\Psr7Bridge\Psr7ServerRequest;
 
-final class RequestIdListener extends AbstractListenerAggregate
+final class RequestIdListener extends AbstractListenerAggregate implements RequestIdProviderInterface
 {
     const DEFAULT_REQUEST_ID_HEADER = 'X-Request-Id';
 
@@ -34,11 +37,11 @@ final class RequestIdListener extends AbstractListenerAggregate
 
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_BOOTSTRAP, [$this, 'getRequestId']);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_BOOTSTRAP, [$this, 'loadRequestId']);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, [$this, 'addRequestIdToResponse']);
     }
 
-    public function getRequestId(MvcEvent $event)
+    public function loadRequestId(MvcEvent $event)
     {
         $request = $event->getRequest();
 
@@ -54,6 +57,14 @@ final class RequestIdListener extends AbstractListenerAggregate
         return $this->requestId ;
     }
 
+    public function getRequestId()
+    {
+        if ($this->requestId === null) {
+            throw new MissingRequestId();
+        }
+
+        return $this->requestId;
+    }
 
     public function addRequestIdToResponse(MvcEvent $event)
     {
@@ -69,6 +80,5 @@ final class RequestIdListener extends AbstractListenerAggregate
 
         $headers = $response->getHeaders();
         $headers->addHeader(new GenericHeader($this->requestIdHeaderName, $this->requestId));
-;
     }
 }

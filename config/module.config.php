@@ -3,7 +3,7 @@
 return [
     'rst_group' => [
         'request_id_module' => [
-            'header' => 'X-Request-Id',
+            'header_name' => 'X-Request-Id',
             'allow_override'=> true,
         ]
     ],
@@ -15,6 +15,9 @@ return [
         'invokables' => [
             \PhpMiddleware\RequestId\Generator\GeneratorInterface::class => \PhpMiddleware\RequestId\Generator\PhpUniqidGenerator::class,
         ],
+        'aliases' => [
+            \PhpMiddleware\RequestId\RequestIdProviderInterface::class => \RstGroup\RequestIdModule\RequestIdListener::class,
+        ]
     ],
     'listeners' => [
         \RstGroup\RequestIdModule\RequestIdListener::class,

@@ -1,6 +1,7 @@
 <?php
 namespace RstGroup\RequestIdModule\Test;
 
+use PhpMiddleware\RequestId\Exception\MissingRequestId;
 use PhpMiddleware\RequestId\RequestIdProviderFactoryInterface;
 use PhpMiddleware\RequestId\RequestIdProviderInterface;
 use RstGroup\RequestIdModule\RequestIdListener;
@@ -27,7 +28,7 @@ class RequestIdListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_get_request_id()
+    public function it_load_request_id()
     {
         $this->requestIdProviderInterface->method('getRequestId')->willReturn('abc123');
 
@@ -36,7 +37,8 @@ class RequestIdListenerTest extends \PHPUnit_Framework_TestCase
         $mvcEvent = new MvcEvent();
         $mvcEvent->setRequest(new HttpRequest());
 
-        $requestId = $requestIdListener->getRequestId($mvcEvent);
+        $requestIdListener->loadRequestId($mvcEvent);
+        $requestId = $requestIdListener->getRequestId();
 
         $this->assertSame('abc123', $requestId);
     }
@@ -53,7 +55,7 @@ class RequestIdListenerTest extends \PHPUnit_Framework_TestCase
         $mvcEvent = new MvcEvent();
         $mvcEvent->setRequest(new HttpRequest());
 
-        $requestIdListener->getRequestId($mvcEvent);
+        $requestIdListener->loadRequestId($mvcEvent);
 
         $response = new HttpResponse();
         $mvcEvent->setResponse($response);
@@ -66,7 +68,7 @@ class RequestIdListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_not_add_request_id_to_response_if_get_request_id()
+    public function it_not_add_request_id_to_response_after_load_request_id()
     {
         $requestIdListener = new RequestIdListener($this->requestIdProviderFactoryInterface);
 
@@ -83,14 +85,17 @@ class RequestIdListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_get_request_id_if_not_http_request()
+    public function it_not_load_request_id_if_not_http_request()
     {
         $requestIdListener = new RequestIdListener($this->requestIdProviderFactoryInterface);
 
         $mvcEvent = new MvcEvent();
         $mvcEvent->setRequest(new ConsoleRequest());
 
-        $requestId = $requestIdListener->getRequestId($mvcEvent);
+        $this->setExpectedException(MissingRequestId::class);
+
+        $requestIdListener->loadRequestId($mvcEvent);
+        $requestId = $requestIdListener->getRequestId();
 
         $this->assertNull($requestId);
     }
@@ -108,5 +113,17 @@ class RequestIdListenerTest extends \PHPUnit_Framework_TestCase
         $result = $requestIdListener->addRequestIdToResponse($mvcEvent);
 
         $this->assertNull($result);
+    }
+
+    /**
+     * @test
+     */
+    public function it_throw_excpetion_if_request_id_is_not_set()
+    {
+        $requestIdListener = new RequestIdListener($this->requestIdProviderFactoryInterface);
+
+        $this->setExpectedException(MissingRequestId::class);
+
+        $requestIdListener->getRequestId();
     }
 }

@@ -32,7 +32,7 @@ You can also change request header and not to allow override `request id` by req
 return [
     'rst_group' => [
         'request_id_module' => [
-            'header' => 'X-Custom-Request-Id',
+            'header_name' => 'X-Custom-Request-Id',
             'allow_override'=> false,
         ],
     ],
@@ -51,6 +51,15 @@ return [
        ],
     ],
 ];
+```
+
+## Usage
+
+If you need `request id`, ex. to send request id to another service, you can get it from provider:
+
+```php
+$requestIdProvider = $serviceLocator->get(\PhpMiddleware\RequestId\RequestIdProviderInterface::class);
+$requestId = $requestIdProvider->getRequestId();
 ```
 
 

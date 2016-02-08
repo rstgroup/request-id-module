@@ -12,7 +12,7 @@ class RequestIdProviderFactoryFactory
 
         $config = $services->get('Config');
         $allowOverride = $config['rst_group']['request_id_module']['allow_override'];
-        $requestIdHeaderName = $config['rst_group']['request_id_module']['header'];
+        $requestIdHeaderName = $config['rst_group']['request_id_module']['header_name'];
 
         return new RequestIdProviderFactory($generator, $allowOverride, $requestIdHeaderName);
     }
