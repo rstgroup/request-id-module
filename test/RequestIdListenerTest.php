@@ -36,7 +36,8 @@ class RequestIdListenerTest extends \PHPUnit_Framework_TestCase
         $mvcEvent = new MvcEvent();
         $mvcEvent->setRequest(new HttpRequest());
 
-        $requestId = $requestIdListener->getRequestId($mvcEvent);
+        $requestIdListener->loadRequestId($mvcEvent);
+        $requestId = $requestIdListener->getRequestId();
 
         $this->assertSame('abc123', $requestId);
     }
@@ -53,7 +54,7 @@ class RequestIdListenerTest extends \PHPUnit_Framework_TestCase
         $mvcEvent = new MvcEvent();
         $mvcEvent->setRequest(new HttpRequest());
 
-        $requestIdListener->getRequestId($mvcEvent);
+        $requestIdListener->loadRequestId($mvcEvent);
 
         $response = new HttpResponse();
         $mvcEvent->setResponse($response);
@@ -90,7 +91,8 @@ class RequestIdListenerTest extends \PHPUnit_Framework_TestCase
         $mvcEvent = new MvcEvent();
         $mvcEvent->setRequest(new ConsoleRequest());
 
-        $requestId = $requestIdListener->getRequestId($mvcEvent);
+        $requestIdListener->loadRequestId($mvcEvent);
+        $requestId = $requestIdListener->getRequestId();
 
         $this->assertNull($requestId);
     }

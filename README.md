@@ -53,4 +53,13 @@ return [
 ];
 ```
 
+## Usage
+
+`RstGroup\RequestIdModule\RequestIdListener` implements `PhpMiddleware\RequestId\RequestIdProviderInterface`, so you can use them if you want to send request id to another service.
+
+```php
+$requestIdProvider = $serviceLocator->get(\RstGroup\RequestIdModule\RequestIdListener::class);
+$requestId = $requestIdProvider->getRequestId();
+```
+
 
