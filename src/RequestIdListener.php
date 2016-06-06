@@ -2,7 +2,7 @@
 namespace RstGroup\RequestIdModule;
 
 use PhpMiddleware\RequestId\Exception\MissingRequestId;
-use PhpMiddleware\RequestId\Exception\RequestIdExceptionInterface;
+use PhpMiddleware\RequestId\Generator\GeneratorInterface;
 use PhpMiddleware\RequestId\RequestIdProviderInterface;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
@@ -29,13 +29,18 @@ final class RequestIdListener extends AbstractListenerAggregate implements Reque
 
     protected $requestIdProviderFactory;
 
-    public function __construct(RequestIdProviderFactoryInterface $requestIdProviderFactory, $requestIdHeaderName = self::DEFAULT_REQUEST_ID_HEADER)
+    private $requestIdGenerator;
+
+    public function __construct(RequestIdProviderFactoryInterface $requestIdProviderFactory,
+                                $requestIdHeaderName = self::DEFAULT_REQUEST_ID_HEADER,
+                                GeneratorInterface $requestIdGenerator = null)
     {
         $this->requestIdProviderFactory = $requestIdProviderFactory;
         $this->requestIdHeaderName = $requestIdHeaderName;
+        $this->requestIdGenerator = $requestIdGenerator;
     }
 
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(MvcEvent::EVENT_BOOTSTRAP, [$this, 'loadRequestId']);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, [$this, 'addRequestIdToResponse']);
@@ -45,16 +50,16 @@ final class RequestIdListener extends AbstractListenerAggregate implements Reque
     {
         $request = $event->getRequest();
 
-        if (!$request instanceof HttpRequest) {
-            return;
+        if ($request instanceof HttpRequest) {
+            $psr7Request = Psr7ServerRequest::fromZend($request);
+            $requestIdProvider = $this->requestIdProviderFactory->create($psr7Request);
+            $this->requestId = $requestIdProvider->getRequestId();
+
+        } elseif ($this->requestIdGenerator !== null) {
+            $this->requestId = $this->requestIdGenerator->generateRequestId();
         }
-        $psr7Request = Psr7ServerRequest::fromZend($request);
 
-        $requestIdProvider = $this->requestIdProviderFactory->create($psr7Request);
-
-        $this->requestId = $requestIdProvider->getRequestId();
-
-        return $this->requestId ;
+        return $this->requestId;
     }
 
     public function getRequestId()
