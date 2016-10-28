@@ -1,6 +1,6 @@
 <?php
 
-return [
+$config = [
     // This should be an array of module namespaces used in the application.
     'modules' => [
         'RstGroup\RequestIdModule'
@@ -30,3 +30,9 @@ return [
         ],
     ],
 ];
+
+if (class_exists(\Zend\Router\Module::class)) {
+    $config['modules'][] = 'Zend\Router';
+}
+
+return $config;
