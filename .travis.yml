@@ -29,8 +29,8 @@ matrix:
         - DEPS=latest
 
 install:
-  - if [[ $DEPS == 'latest' ]]; then travis_retry composer install --no-interaction --prefer-source ; fi
-  - if [[ $DEPS == 'lowest' ]]; then travis_retry composer install --no-interaction --prefer-source --prefer-lowest ; fi
+  - if [[ $DEPS == 'latest' ]]; then travis_retry composer update --no-interaction --prefer-source ; fi
+  - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --no-interaction --prefer-source --prefer-lowest ; fi
   - composer info -i
 
 script:
