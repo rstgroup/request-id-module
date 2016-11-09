@@ -7,10 +7,8 @@ If you want more information, how `request id` is generating, check dependent pr
 
 ## Installation
 
-```json
-"require": {
-    "rstgroup/request-id-module": "dev-develop"
-}
+```bash
+composer require rstgroup/request-id-module
 ```
 
 

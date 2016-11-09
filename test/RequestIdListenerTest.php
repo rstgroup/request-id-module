@@ -2,6 +2,7 @@
 namespace RstGroup\RequestIdModule\Test;
 
 use PhpMiddleware\RequestId\Exception\MissingRequestId;
+use PhpMiddleware\RequestId\Generator\GeneratorInterface;
 use PhpMiddleware\RequestId\RequestIdProviderFactoryInterface;
 use PhpMiddleware\RequestId\RequestIdProviderInterface;
 use RstGroup\RequestIdModule\RequestIdListener;
@@ -85,7 +86,7 @@ class RequestIdListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_not_load_request_id_if_not_http_request()
+    public function it_not_load_request_id_if_not_http_request_and_generator_is_undefined()
     {
         $requestIdListener = new RequestIdListener($this->requestIdProviderFactoryInterface);
 
@@ -98,6 +99,25 @@ class RequestIdListenerTest extends \PHPUnit_Framework_TestCase
         $requestId = $requestIdListener->getRequestId();
 
         $this->assertNull($requestId);
+    }
+
+    /**
+     * @test
+     */
+    public function it_create_request_id_if_not_http_request()
+    {
+        $requestId = 'e5dd58f4-b72d-4d7e-b0c9-d99040386a58';
+        $requestIdGenerator = $this->getMock(GeneratorInterface::class);
+        $requestIdGenerator->method('generateRequestId')->willReturn($requestId);
+
+        $requestIdListener = new RequestIdListener($this->requestIdProviderFactoryInterface, RequestIdListener::DEFAULT_REQUEST_ID_HEADER, $requestIdGenerator);
+
+        $mvcEvent = new MvcEvent();
+        $mvcEvent->setRequest(new ConsoleRequest());
+
+        $requestIdListener->loadRequestId($mvcEvent);
+
+        $this->assertSame($requestId, $requestIdListener->getRequestId());
     }
 
     /**
