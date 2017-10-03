@@ -12,6 +12,7 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^5.7",
+    "zendframework/zend-modulemanager": "^2.4",
     "zendframework/zend-config": "^2.4 | ^3.0",
     "zendframework/zend-i18n": "^2.4",
     "zendframework/zend-log": "^2.4",
