@@ -5,7 +5,7 @@
     "zendframework/zend-eventmanager": "^3",
     "zendframework/zend-http": "^2.4",
     "zendframework/zend-mvc": "^3",
-    "zendframework/zend-servicemanager": "^3",
+    "zendframework/zend-servicemanager": "^3.3",
     "zendframework/zend-stdlib": "^3",
     "zendframework/zend-psr7bridge": "^1.0",
     "php-middleware/request-id": "^4.0"
