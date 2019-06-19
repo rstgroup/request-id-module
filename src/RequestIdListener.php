@@ -17,36 +17,28 @@ final class RequestIdListener extends AbstractListenerAggregate implements Reque
 {
     const DEFAULT_REQUEST_ID_HEADER = 'X-Request-Id';
 
-    /**
-     * @var string
-     */
-    protected $requestId;
-
-    /**
-     * @var string
-     */
-    protected $requestIdHeaderName;
-
-    protected $requestIdProviderFactory;
-
+    private $requestId;
+    private $requestIdHeaderName;
+    private $requestIdProviderFactory;
     private $requestIdGenerator;
 
-    public function __construct(RequestIdProviderFactoryInterface $requestIdProviderFactory,
-                                $requestIdHeaderName = self::DEFAULT_REQUEST_ID_HEADER,
-                                GeneratorInterface $requestIdGenerator = null)
-    {
+    public function __construct(
+        RequestIdProviderFactoryInterface $requestIdProviderFactory,
+        string $requestIdHeaderName = null,
+        GeneratorInterface $requestIdGenerator = null
+    ) {
         $this->requestIdProviderFactory = $requestIdProviderFactory;
-        $this->requestIdHeaderName = $requestIdHeaderName;
+        $this->requestIdHeaderName = $requestIdHeaderName ?? self::DEFAULT_REQUEST_ID_HEADER;
         $this->requestIdGenerator = $requestIdGenerator;
     }
 
-    public function attach(EventManagerInterface $events, $priority = 1)
+    public function attach(EventManagerInterface $events, $priority = 1): void
     {
         $this->listeners[] = $events->attach(MvcEvent::EVENT_BOOTSTRAP, [$this, 'loadRequestId']);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, [$this, 'addRequestIdToResponse']);
     }
 
-    public function loadRequestId(MvcEvent $event)
+    public function loadRequestId(MvcEvent $event): ?string
     {
         $request = $event->getRequest();
 
@@ -62,7 +54,7 @@ final class RequestIdListener extends AbstractListenerAggregate implements Reque
         return $this->requestId;
     }
 
-    public function getRequestId()
+    public function getRequestId(): string
     {
         if ($this->requestId === null) {
             throw new MissingRequestId();
@@ -71,7 +63,7 @@ final class RequestIdListener extends AbstractListenerAggregate implements Reque
         return $this->requestId;
     }
 
-    public function addRequestIdToResponse(MvcEvent $event)
+    public function addRequestIdToResponse(MvcEvent $event): void
     {
         $response = $event->getResponse();
 

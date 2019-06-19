@@ -17,7 +17,7 @@ In your ZF2 application config add to module list
 ```php
 return [
     'modules' => [
-        'RstGroup\RequestIdModule',
+        \RstGroup\RequestIdModule::class,
     ],
 ];
 ```

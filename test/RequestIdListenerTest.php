@@ -5,6 +5,7 @@ use PhpMiddleware\RequestId\Exception\MissingRequestId;
 use PhpMiddleware\RequestId\Generator\GeneratorInterface;
 use PhpMiddleware\RequestId\RequestIdProviderFactoryInterface;
 use PhpMiddleware\RequestId\RequestIdProviderInterface;
+use PHPUnit\Framework\TestCase;
 use RstGroup\RequestIdModule\RequestIdListener;
 use Zend\Console\Response as ConsoleResponse;
 use Zend\Console\Request as ConsoleRequest;
@@ -12,7 +13,7 @@ use Zend\Http\Request as HttpRequest;
 use Zend\Http\Response as HttpResponse;
 use Zend\Mvc\MvcEvent;
 
-class RequestIdListenerTest extends \PHPUnit_Framework_TestCase
+class RequestIdListenerTest extends TestCase
 {
     protected $requestIdProviderFactoryInterface;
 
@@ -20,8 +21,8 @@ class RequestIdListenerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->requestIdProviderFactoryInterface = $this->getMock(RequestIdProviderFactoryInterface::class);
-        $this->requestIdProviderInterface = $this->getMock(RequestIdProviderInterface::class);
+        $this->requestIdProviderFactoryInterface = $this->createMock(RequestIdProviderFactoryInterface::class);
+        $this->requestIdProviderInterface = $this->createMock(RequestIdProviderInterface::class);
 
         $this->requestIdProviderFactoryInterface->method('create')->willReturn($this->requestIdProviderInterface);
     }
@@ -93,12 +94,13 @@ class RequestIdListenerTest extends \PHPUnit_Framework_TestCase
         $mvcEvent = new MvcEvent();
         $mvcEvent->setRequest(new ConsoleRequest());
 
-        $this->setExpectedException(MissingRequestId::class);
+
 
         $requestIdListener->loadRequestId($mvcEvent);
-        $requestId = $requestIdListener->getRequestId();
 
-        $this->assertNull($requestId);
+        $this->expectException(MissingRequestId::class);
+
+        $requestIdListener->getRequestId();
     }
 
     /**
@@ -107,7 +109,7 @@ class RequestIdListenerTest extends \PHPUnit_Framework_TestCase
     public function it_create_request_id_if_not_http_request()
     {
         $requestId = 'e5dd58f4-b72d-4d7e-b0c9-d99040386a58';
-        $requestIdGenerator = $this->getMock(GeneratorInterface::class);
+        $requestIdGenerator = $this->createMock(GeneratorInterface::class);
         $requestIdGenerator->method('generateRequestId')->willReturn($requestId);
 
         $requestIdListener = new RequestIdListener($this->requestIdProviderFactoryInterface, RequestIdListener::DEFAULT_REQUEST_ID_HEADER, $requestIdGenerator);
@@ -127,12 +129,14 @@ class RequestIdListenerTest extends \PHPUnit_Framework_TestCase
     {
         $requestIdListener = new RequestIdListener($this->requestIdProviderFactoryInterface);
 
+        $response = new ConsoleResponse();
+        $responseCopy = clone $response;
         $mvcEvent = new MvcEvent();
-        $mvcEvent->setResponse(new ConsoleResponse());
+        $mvcEvent->setResponse($response);
 
-        $result = $requestIdListener->addRequestIdToResponse($mvcEvent);
+        $requestIdListener->addRequestIdToResponse($mvcEvent);
 
-        $this->assertNull($result);
+        $this->assertEquals($responseCopy, $response);
     }
 
     /**
@@ -142,7 +146,7 @@ class RequestIdListenerTest extends \PHPUnit_Framework_TestCase
     {
         $requestIdListener = new RequestIdListener($this->requestIdProviderFactoryInterface);
 
-        $this->setExpectedException(MissingRequestId::class);
+        $this->expectException(MissingRequestId::class);
 
         $requestIdListener->getRequestId();
     }
