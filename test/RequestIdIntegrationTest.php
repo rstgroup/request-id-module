@@ -152,7 +152,7 @@ class RequestIdIntegrationTest extends AbstractHttpControllerTestCase
             ]
         ]);
 
-        $controller = $this->getMock(DispatchableInterface::class);
+        $controller = $this->createMock(DispatchableInterface::class);
         $controller->method('dispatch')->willReturnCallback($controllerCallback);
 
         /** @var ControllerManager $controllerLoader */

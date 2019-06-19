@@ -3,16 +3,17 @@ namespace RstGroup\RequestIdModule;
 
 use PhpMiddleware\RequestId\Generator\GeneratorInterface;
 use PhpMiddleware\RequestId\RequestIdProviderFactoryInterface;
+use Psr\Container\ContainerInterface;
 
-class RequestIdListenerFactory
+final class RequestIdListenerFactory
 {
-    public function __invoke($services)
+    public function __invoke(ContainerInterface $container): RequestIdListener
     {
-        $requestIdGenerator = $services->get(GeneratorInterface::class);
-        $requestIdProviderFactory = $services->get(RequestIdProviderFactoryInterface::class);
+        $requestIdGenerator = $container->get(GeneratorInterface::class);
+        $requestIdProviderFactory = $container->get(RequestIdProviderFactoryInterface::class);
 
-        $config = $services->get('Config');
-        $requestIdHeaderName = $config['rst_group']['request_id_module']['header_name'];
+        $config = $container->get('Config')['rst_group']['request_id_module'];
+        $requestIdHeaderName = $config['header_name'];
 
         return new RequestIdListener($requestIdProviderFactory, $requestIdHeaderName, $requestIdGenerator);
     }

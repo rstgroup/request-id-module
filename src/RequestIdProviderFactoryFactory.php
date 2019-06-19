@@ -3,17 +3,16 @@ namespace RstGroup\RequestIdModule;
 
 use PhpMiddleware\RequestId\Generator\GeneratorInterface;
 use PhpMiddleware\RequestId\RequestIdProviderFactory;
+use Psr\Container\ContainerInterface;
 
-class RequestIdProviderFactoryFactory
+final class RequestIdProviderFactoryFactory
 {
-    public function __invoke($services)
+    public function __invoke(ContainerInterface $container): RequestIdProviderFactory
     {
-        $generator = $services->get(GeneratorInterface::class);
+        $generator = $container->get(GeneratorInterface::class);
 
-        $config = $services->get('Config');
-        $allowOverride = $config['rst_group']['request_id_module']['allow_override'];
-        $requestIdHeaderName = $config['rst_group']['request_id_module']['header_name'];
+        $config = $container->get('Config')['rst_group']['request_id_module'];
 
-        return new RequestIdProviderFactory($generator, $allowOverride, $requestIdHeaderName);
+        return new RequestIdProviderFactory($generator, $config['allow_override'], $config['header_name']);
     }
 }
