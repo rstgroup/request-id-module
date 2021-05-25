@@ -11,7 +11,7 @@
     "php-middleware/request-id": "^4.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^7.5",
+    "phpunit/phpunit": "^7.5.20",
     "zendframework/zend-modulemanager": "^2.4",
     "zendframework/zend-config": "^2.4 | ^3.0",
     "zendframework/zend-i18n": "^2.4",
