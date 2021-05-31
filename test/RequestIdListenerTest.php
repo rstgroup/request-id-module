@@ -19,7 +19,7 @@ class RequestIdListenerTest extends TestCase
 
     protected $requestIdProviderInterface;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->requestIdProviderFactoryInterface = $this->createMock(RequestIdProviderFactoryInterface::class);
         $this->requestIdProviderInterface = $this->createMock(RequestIdProviderInterface::class);

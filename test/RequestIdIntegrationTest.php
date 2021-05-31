@@ -14,7 +14,7 @@ class RequestIdIntegrationTest extends AbstractHttpControllerTestCase
 {
     protected $traceError = false;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -31,11 +31,11 @@ class RequestIdIntegrationTest extends AbstractHttpControllerTestCase
         ]);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($_SERVER['HTTP_X_REQUEST_ID']);
 
-        return parent::tearDown();
+        parent::tearDown();
     }
 
     /**
