@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/rstgroup/request-id-module.svg?branch=master)](https://travis-ci.org/rstgroup/request-id-module)
 
-This module provide integration possibility to generate and add `request id` to request/response's header.
+This module provide integration possibility to generate and add `request id` to request/response's header in Laminas applications.
 If you want more information, how `request id` is generating, check dependent project [php-middleware/request-id](https://github.com/php-middleware/request-id).
 
 ## Installation
@@ -12,7 +12,7 @@ composer require rstgroup/request-id-module
 ```
 
 
-In your ZF2 application config add to module list
+In your Laminas application config add to module list
 
 ```php
 return [

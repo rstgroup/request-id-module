@@ -1,14 +1,14 @@
 <?php
 namespace RstGroup\RequestIdModule\Test;
 
-use Zend\Http\Response;
-use Zend\Mvc\Controller\ControllerManager;
-use Zend\Mvc\Router\RouteStackInterface;
-use Zend\Stdlib\ArrayUtils;
-use Zend\Stdlib\DispatchableInterface;
-use Zend\Stdlib\RequestInterface;
-use Zend\Stdlib\ResponseInterface;
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Laminas\Http\Response;
+use Laminas\Mvc\Controller\ControllerManager;
+use Laminas\Mvc\Router\RouteStackInterface;
+use Laminas\Stdlib\ArrayUtils;
+use Laminas\Stdlib\DispatchableInterface;
+use Laminas\Stdlib\RequestInterface;
+use Laminas\Stdlib\ResponseInterface;
+use Laminas\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 class RequestIdIntegrationTest extends AbstractHttpControllerTestCase
 {
@@ -194,7 +194,7 @@ class RequestIdIntegrationTest extends AbstractHttpControllerTestCase
      * Get response header by key
      *
      * @param  string $header
-     * @return \Zend\Http\Header\HeaderInterface|false
+     * @return \Laminas\Http\Header\HeaderInterface|false
      */
     protected function getRegeustHeader($header)
     {
