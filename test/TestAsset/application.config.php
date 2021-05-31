@@ -31,8 +31,8 @@ $config = [
     ],
 ];
 
-if (class_exists(\Zend\Router\Module::class)) {
-    $config['modules'][] = 'Zend\Router';
+if (class_exists(\Laminas\Router\Module::class)) {
+    $config['modules'][] = \Laminas\Router\Module::class;
 }
 
 return $config;

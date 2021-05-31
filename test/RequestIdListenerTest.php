@@ -7,11 +7,11 @@ use PhpMiddleware\RequestId\RequestIdProviderFactoryInterface;
 use PhpMiddleware\RequestId\RequestIdProviderInterface;
 use PHPUnit\Framework\TestCase;
 use RstGroup\RequestIdModule\RequestIdListener;
-use Zend\Console\Response as ConsoleResponse;
-use Zend\Console\Request as ConsoleRequest;
-use Zend\Http\Request as HttpRequest;
-use Zend\Http\Response as HttpResponse;
-use Zend\Mvc\MvcEvent;
+use Laminas\Console\Response as ConsoleResponse;
+use Laminas\Console\Request as ConsoleRequest;
+use Laminas\Http\Request as HttpRequest;
+use Laminas\Http\Response as HttpResponse;
+use Laminas\Mvc\MvcEvent;
 
 class RequestIdListenerTest extends TestCase
 {
@@ -19,7 +19,7 @@ class RequestIdListenerTest extends TestCase
 
     protected $requestIdProviderInterface;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->requestIdProviderFactoryInterface = $this->createMock(RequestIdProviderFactoryInterface::class);
         $this->requestIdProviderInterface = $this->createMock(RequestIdProviderInterface::class);

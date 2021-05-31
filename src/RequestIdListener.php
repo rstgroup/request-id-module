@@ -4,14 +4,14 @@ namespace RstGroup\RequestIdModule;
 use PhpMiddleware\RequestId\Exception\MissingRequestId;
 use PhpMiddleware\RequestId\Generator\GeneratorInterface;
 use PhpMiddleware\RequestId\RequestIdProviderInterface;
-use Zend\EventManager\AbstractListenerAggregate;
-use Zend\EventManager\EventManagerInterface;
-use Zend\Http\Request as HttpRequest;
-use Zend\Mvc\MvcEvent;
+use Laminas\EventManager\AbstractListenerAggregate;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\Http\Request as HttpRequest;
+use Laminas\Mvc\MvcEvent;
 use PhpMiddleware\RequestId\RequestIdProviderFactoryInterface;
-use Zend\Http\Header\GenericHeader;
-use Zend\Http\Response as HttpResponse;
-use Zend\Psr7Bridge\Psr7ServerRequest;
+use Laminas\Http\Header\GenericHeader;
+use Laminas\Http\Response as HttpResponse;
+use Laminas\Psr7Bridge\Psr7ServerRequest;
 
 final class RequestIdListener extends AbstractListenerAggregate implements RequestIdProviderInterface
 {
@@ -43,7 +43,7 @@ final class RequestIdListener extends AbstractListenerAggregate implements Reque
         $request = $event->getRequest();
 
         if ($request instanceof HttpRequest) {
-            $psr7Request = Psr7ServerRequest::fromZend($request);
+            $psr7Request = Psr7ServerRequest::fromLaminas($request);
             $requestIdProvider = $this->requestIdProviderFactory->create($psr7Request);
             $this->requestId = $requestIdProvider->getRequestId();
 

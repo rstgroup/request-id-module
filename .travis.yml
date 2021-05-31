@@ -28,7 +28,6 @@ matrix:
       env:
         - DEPS=latest
 
-
 install:
   - if [[ $DEPS == 'latest' ]]; then travis_retry composer update --no-interaction ; fi
   - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --no-interaction --prefer-lowest ; fi
