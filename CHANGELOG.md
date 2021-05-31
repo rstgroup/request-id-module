@@ -2,7 +2,6 @@
 
 ## [3.0.0] - 2021-05-31
 ### Added
-- Support for php 8.0
 - Migrate to Laminas
 
 ## [2.0.0] - 2016-02-08
